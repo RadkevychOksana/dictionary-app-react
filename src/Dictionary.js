@@ -9,55 +9,54 @@ export default function Dictionary(props) {
     1. keyword як "" (до вводу тексту в форму)
     2. results як {} (дані, що передаються по API з  https://dictionaryapi.dev)
     */
-  let [keyword, setKeyword] = useState("");
+  let [keyword, setKeyword] = useState(props.defaultKeyword);
   let [results, setResults] = useState(null);
+  let [loaded,setLoaded] = useState(false);
 
-  /*Функція handleResponse повертає обєкт через API з https://dictionaryapi.dev/
-  і змінює статус results з {} на response.data[0]
-  */
 
   function handleResponse(response) {
     setResults(response.data[0]);
   }
-
-  /*
-    1.функція search виводить значення з поля вводу в формі.
-    2. Підключає Api (https://dictionaryapi.dev/).
   
-  */
-  function search(event) {
-    event.preventDefault();
-
+  function search(){
     let apiUrl = `https://api.dictionaryapi.dev/api/v2/entries/en/${keyword}`;
-
     axios.get(apiUrl).then(handleResponse);
   }
 
-  /*функція handleKeywordChange змінює статус keyword "" на  event.target.valueз*/
+  function handleSubmit(event) {
+    event.preventDefault();
+    search();
+
+  }
+
+  
   function handleKeywordChange(event) {
     setKeyword(event.target.value);
   }
-  /*
-  Події
-    1.При відправці форми подія  onSubmit запускає функцію search.  
-    2.При введенні тексту в поле вводу форми подія  onChange, що запускає функцію handleKeywordChange.
 
-    Компоненти:
-      <Results results="results"/>
-      <Results results="results"/>
-    1. Results обробляються данні з https://dictionaryapi.dev/, що передаються через API. Властивість results = актуальний статус results
-  */
-
-  return (
-    <div className="Dictionary">
-      <form onSubmit={search}>
-        <input
-          type="search"
-          autoFocus={true}
-          onChange={handleKeywordChange}
-        ></input>
-      </form>
-      <Results results={results}/>
-    </div>
-  );
-}
+  function load(){
+    setLoaded(true);
+    search();
+  }
+  if(loaded){
+    return (
+      <div className="Dictionary">
+        <section>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="search"
+            autoFocus={true}
+            onChange={handleKeywordChange}
+          ></input>
+        </form>
+        <div className="hint">
+          Suggested words: sunset, wine, yoga, plant...
+        </div>
+        </section>
+        <Results results={results}/>
+      </div>
+    );
+  } else{
+    load();
+    return "Loading..."; 
+}}

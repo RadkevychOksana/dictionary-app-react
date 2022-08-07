@@ -20,15 +20,13 @@ export default function Meaning(props) {
         console.log(definition.synonyms);
         return (
           <div key={index}>
-            <p>
-              <strong>Definition:</strong>
-              {definition.definition} <br />
-              <Example example={definition.example} />
-            </p>
+            <div className="Definition">{definition.definition}</div>
+            <div className="Example">
+            <Example example={definition.example} />
+            </div> 
           </div>
         );
       })}
-      <strong>Synonyms:</strong>
       <Synonyms synonyms={props.meaning.synonyms} />
     </div>
   );

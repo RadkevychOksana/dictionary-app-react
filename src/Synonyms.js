@@ -1,7 +1,7 @@
 import React from "react";
-/* Умова виведення - якщо props.synonyms === true (є даніњ), виводимо блок з синонімами, або нічого (null) */
+import "./Synonyms.css";
+
 export default function Synonyms(props) {
-  console.log(props.synonyms);
   if (props.synonyms) {
     return (
       <div>
